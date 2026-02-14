@@ -2,495 +2,107 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#6366f1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Focus Flow - Assistant TDAH</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-            --secondary: #ec4899;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            
-            --bg-primary: #0f0f23;
-            --bg-secondary: #1a1a35;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --glass: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #a3a3d8;
-            --text-muted: #6b7280;
-            
-            --color-pro: #6366f1;
-            --color-home: #ec4899;
-            --color-health: #10b981;
-            --color-admin: #f59e0b;
-            --color-personal: #8b5cf6;
-            
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 3rem;
-            
-            --radius-sm: 0.5rem;
-            --radius-md: 1rem;
-            --radius-lg: 1.5rem;
-            --radius-full: 9999px;
-            
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        body {
-            font-family: 'Outfit', -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .app-container {
-            position: relative;
-            z-index: 1;
-            max-width: 480px;
-            margin: 0 auto;
-            padding: var(--space-md) var(--space-sm) calc(80px + env(safe-area-inset-bottom, 0));
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: system-ui, sans-serif; 
+            background: #0f0f23; 
+            color: white; 
+            padding: 20px;
             min-height: 100vh;
         }
-
-        .app-header {
-            padding: var(--space-lg) 0 var(--space-md);
-            text-align: center;
+        .app { max-width: 500px; margin: 0 auto; }
+        h1 { font-size: 2rem; margin: 20px 0; text-align: center; }
+        .card { 
+            background: rgba(255,255,255,0.1); 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 15px;
+            border-left: 4px solid #6366f1;
         }
-
-        .app-logo {
-            font-size: 3rem;
-            margin-bottom: var(--space-sm);
-            animation: float 3s ease-in-out infinite;
+        .project-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
+        .progress-bar { 
+            width: 100%; 
+            height: 20px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            transition: width 0.3s;
         }
-
-        .app-title {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: var(--space-xs);
-        }
-
-        .app-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-lg);
-            padding: var(--space-md);
-            margin-bottom: var(--space-md);
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: var(--space-xs);
-            margin-bottom: var(--space-lg);
-            background: var(--bg-card);
-            padding: var(--space-xs);
-            border-radius: var(--radius-lg);
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .nav-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-tab {
-            flex-shrink: 0;
-            padding: var(--space-sm) var(--space-md);
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .nav-tab.active {
-            background: var(--primary);
+        button {
+            background: #6366f1;
             color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-        }
-
-        .motivation-banner {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: var(--space-md);
-            border-radius: var(--radius-lg);
-            margin-bottom: var(--space-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .motivation-text {
-            position: relative;
-            z-index: 1;
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: var(--space-xs);
-        }
-
-        .motivation-sub {
-            position: relative;
-            z-index: 1;
-            opacity: 0.9;
-            font-size: 0.9rem;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-md);
-        }
-
-        .section-icon {
-            font-size: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            flex: 1;
-        }
-
-        .task-card {
-            background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-md);
-            padding: var(--space-md);
-            margin-bottom: var(--space-sm);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .task-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent-color, var(--primary));
-        }
-
-        .task-card:hover {
-            transform: translateX(4px);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .task-header {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-        }
-
-        .task-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            flex: 1;
-        }
-
-        .task-info {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-full);
-            overflow: hidden;
-            margin: var(--space-sm) 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            border-radius: var(--radius-full);
-            transition: width 0.5s ease;
-        }
-
-        .btn {
-            padding: var(--space-sm) var(--space-md);
             border: none;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-size: 0.9rem;
+            padding: 12px 24px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .mic-button {
-            position: fixed;
-            bottom: calc(20px + env(safe-area-inset-bottom, 0));
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .mic-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6);
-        }
-
-        .mic-button.recording {
-            animation: pulse 1.5s ease-in-out infinite;
-            background: linear-gradient(135deg, var(--danger), var(--warning));
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .routine-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            padding: var(--space-md);
-            margin-bottom: var(--space-sm);
-        }
-
-        .routine-title {
             font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
+            margin: 5px;
         }
-
-        .routine-items {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-xs);
+        button:hover { background: #4f46e5; }
+        .stats { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            margin: 20px 0;
         }
-
-        .routine-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            padding: var(--space-sm);
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .routine-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .routine-item.completed {
-            opacity: 0.5;
-        }
-
-        .routine-checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--primary);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .routine-item.completed .routine-checkbox {
-            background: var(--primary);
-        }
-
-        .routine-item.completed .routine-checkbox::after {
-            content: '✓';
-            color: white;
-            font-weight: bold;
-        }
-
-        .routine-item-text {
-            flex: 1;
-            font-size: 0.9rem;
-        }
-
-        .routine-item.completed .routine-item-text {
-            text-decoration: line-through;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: var(--space-xl) var(--space-md);
-        }
-
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: var(--space-md);
-            opacity: 0.3;
-        }
-
-        .empty-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-sm);
-        }
-
-        .empty-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-sm);
-            margin-bottom: var(--space-md);
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            padding: var(--space-md);
-            border-radius: var(--radius-md);
+        .stat { 
+            background: rgba(255,255,255,0.05); 
+            padding: 15px; 
+            border-radius: 10px;
             text-align: center;
         }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-light);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @media (max-width: 480px) {
-            .app-container {
-                padding-left: var(--space-sm);
-                padding-right: var(--space-sm);
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #818cf8; }
+        .stat-label { font-size: 0.8rem; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div class="app-container" id="app">
-        <!-- Le contenu sera injecté par JavaScript -->
+    <div class="app">
+        <h1>🎯 Focus Flow</h1>
+        <div class="stats">
+            <div class="stat"><div class="stat-value" id="streak">0</div><div class="stat-label">Jours</div></div>
+            <div class="stat"><div class="stat-value" id="completed">0</div><div class="stat-label">Complétés</div></div>
+            <div class="stat"><div class="stat-value" id="points">0</div><div class="stat-label">Points</div></div>
+        </div>
+        <div id="projects"></div>
+        <button onclick="addProgress()">✅ Compléter une tâche</button>
     </div>
-
-    <button class="mic-button" id="micButton">
-        🎤
-    </button>
-
-    <script src="app.js"></script>
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-                .then(() => console.log('Service Worker enregistré'))
-                .catch(err => console.log('Erreur SW:', err));
+        let data = JSON.parse(localStorage.getItem('focus') || '{"streak":0,"completed":0,"points":0,"projects":[{"name":"Projet 1","progress":25},{"name":"Projet 2","progress":40}]}');
+        
+        function render() {
+            document.getElementById('streak').textContent = data.streak;
+            document.getElementById('completed').textContent = data.completed;
+            document.getElementById('points').textContent = data.points;
+            
+            document.getElementById('projects').innerHTML = data.projects.map(p => `
+                <div class="card">
+                    <div class="project-name">${p.name}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${p.progress}%"></div>
+                    </div>
+                    <div>${p.progress}% complété</div>
+                </div>
+            `).join('');
         }
+        
+        function addProgress() {
+            data.completed++;
+            data.points += 10;
+            if(data.projects[0]) data.projects[0].progress = Math.min(100, data.projects[0].progress + 5);
+            localStorage.setItem('focus', JSON.stringify(data));
+            render();
+            alert('🎉 +10 points !');
+        }
+        
+        render();
     </script>
 </body>
 </html>
